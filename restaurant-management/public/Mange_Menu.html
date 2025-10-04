@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Menu</title>
+  <style>
+    /* ---------- Base Styles ---------- */
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1050&q=80') 
+                  no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(6px) brightness(0.8);
+      z-index: -1;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      text-align: center;
+      padding: 20px;
+      color: white;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(6px);
+      font-size: 26px;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* ---------- Dark Mode Toggle ---------- */
+    .toggle-container {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+    }
+
+    .toggle-container button {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .toggle-container button:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    /* ---------- Form Container ---------- */
+    .form-container {
+      display: flex;
+      justify-content: center;
+      margin: 40px 0;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      padding: 25px 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 70%;
+      text-align: center;
+    }
+
+    form h2 {
+      margin-bottom: 15px;
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 45%;
+      padding: 10px;
+      margin: 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    button[type="submit"] {
+      padding: 10px 25px;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #ff8a00, #e52e71);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button[type="submit"]:hover {
+      transform: scale(1.05);
+    }
+
+    /* ---------- Table Styles ---------- */
+    table {
+      width: 90%;
+      margin: 0 auto 50px;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: left;
+      color: #fff;
+    }
+
+    th {
+      background: rgba(0, 0, 0, 0.4);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.01);
+    }
+
+    td button {
+      margin-right: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .update-btn {
+      background: #f39c12;
+    }
+
+    .delete-btn {
+      background: #e74c3c;
+    }
+
+    td button:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    /* ---------- Dark Mode ---------- */
+    body.dark {
+      color: #eee;
+    }
+
+    body.dark header {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f7f7f7;
+    }
+
+    body.dark form,
+    body.dark table {
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+    }
+
+    body.dark input {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid #555;
+    }
+
+    body.dark th {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="toggle-container">
+    <button id="modeToggle">🌙 Dark Mode</button>
+  </div>
+
+  <header>🍽️ Manage Menu</header>
+
+  <div class="form-container">
+    <form id="dishForm">
+      <h2>Add New Dish</h2>
+      <input type="text" id="dish_name" placeholder="Dish Name" required>
+      <input type="number" id="price" placeholder="Price (₹)" required><br>
+      <input type="text" id="ingredients" placeholder="Ingredients" required>
+      <input type="number" id="kcal" placeholder="Kcal" required><br>
+      <button type="submit">Add Dish</button>
+    </form>
+  </div>
+
+  <h2 style="text-align:center; color:white; text-shadow:1px 1px 3px #000;">Current Menu</h2>
+  <table id="menuTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Ingredients</th>
+        <th>Kcal</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const API_URL = "http://localhost:3000/menu";
+
+    // Load menu
+    function loadMenu() {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector("#menuTable tbody");
+          tbody.innerHTML = "";
+          data.forEach(dish => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${dish.id}</td>
+                <td>${dish.dish_name}</td>
+                <td>₹${dish.price}</td>
+                <td>${dish.ingredients}</td>
+                <td>${dish.kcal}</td>
+                <td>
+                  <button class="update-btn" onclick="updateDish(${dish.id})">Update</button>
+                  <button class="delete-btn" onclick="deleteDish(${dish.id})">Delete</button>
+                </td>
+              </tr>`;
+          });
+        });
+    }
+
+    // Add dish
+    document.getElementById("dishForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const dish = {
+        dish_name: document.getElementById("dish_name").value,
+        price: document.getElementById("price").value,
+        ingredients: document.getElementById("ingredients").value,
+        kcal: document.getElementById("kcal").value
+      };
+      fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dish)
+      }).then(() => {
+        loadMenu();
+        e.target.reset();
+      });
+    });
+
+    // Delete dish
+    function deleteDish(id) {
+      fetch(`${API_URL}/${id}`, { method: "DELETE" })
+        .then(() => loadMenu());
+    }
+
+    // Update dish
+    function updateDish(id) {
+      const newName = prompt("Enter new dish name:");
+      const newPrice = prompt("Enter new price:");
+      const newIngredients = prompt("Enter new ingredients:");
+      const newKcal = prompt("Enter new Kcal:");
+      fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dish_name: newName,
+          price: newPrice,
+          ingredients: newIngredients,
+          kcal: newKcal
+        })
+      }).then(() => loadMenu());
+    }
+
+    // Dark Mode Toggle
+    const toggleBtn = document.getElementById("modeToggle");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      toggleBtn.textContent = 
+        document.body.classList.contains("dark") ? "☀️ Bright Mode" : "🌙 Dark Mode";
+    });
+
+    loadMenu();
+  </script>
+</body>
+</html>

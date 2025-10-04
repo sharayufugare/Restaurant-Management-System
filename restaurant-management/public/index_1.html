@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RestaurantPro</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80') 
+                  no-repeat center center/cover;
+      min-height: 100vh;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      animation: bgMove 25s ease-in-out infinite alternate;
+      overflow-x: hidden;
+    }
+
+    /* Background zoom/pan effect */
+    @keyframes bgMove {
+      0% {
+        background-position: center;
+        transform: scale(1);
+      }
+      50% {
+        background-position: top;
+        transform: scale(1.05);
+      }
+      100% {
+        background-position: bottom;
+        transform: scale(1);
+      }
+    }
+
+    /* Floating food animation layer */
+    .bg-animation {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .bg-animation span {
+      position: absolute;
+      font-size: 40px;
+      opacity: 0.6;
+      animation: float 12s linear infinite;
+    }
+
+    @keyframes float {
+      from {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: rgba(0, 0, 0, 0.6);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav h1 {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #ffcc00;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      background: rgba(0, 0, 0, 0.5);
+      text-align: center;
+      padding: 100px 20px 50px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #f1f1f1;
+    }
+
+    /* Get Started Button */
+    .btn {
+      background: #ffcc00;
+      color: black;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn:hover {
+      background: #e6b800;
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+
+    /* Features Section */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 50px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px 20px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(6px);
+    }
+
+    .feature:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .feature i {
+      font-size: 40px;
+      color: #ffcc00;
+      margin-bottom: 15px;
+    }
+
+    .feature h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #ffcc00;
+    }
+
+    .feature p {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .feature a {
+      text-decoration: none;
+      color: #ffcc00;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      font-size: 14px;
+      margin-top: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .features {
+        grid-template-columns: 1fr;
+      }
+      nav {
+        flex-direction: column;
+      }
+      nav ul {
+        margin-top: 10px;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Food Background -->
+  <div class="bg-animation">
+    <span style="left:10%; animation-duration: 15s;">🍕</span>
+    <span style="left:30%; animation-duration: 18s;">🍔</span>
+    <span style="left:50%; animation-duration: 20s;">🍝</span>
+    <span style="left:70%; animation-duration: 22s;">🍷</span>
+    <span style="left:90%; animation-duration: 25s;">🥗</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav>
+    <h1>RestaurantPro</h1>
+    <ul>
+      <li><a href="index_1.html">Home</a></li>
+      <li><a href="Index_2.html">Menu</a></li>
+      <li><a href="#">Orders</a></li>
+      <li><a href="index_4.html">Catalog</a></li>
+      <li><a href="index_3.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h2>Welcome to RestaurantPro</h2>
+    <p>Manage your restaurant effortlessly with style and efficiency!</p>
+    <a href="Index_2.html" class="btn">Get Started</a>
+
+    <!-- Features -->
+    <div class="features">
+      <div class="feature">
+        <i class="fas fa-utensils"></i>
+        <a href="Mange_Menu.html"><h3>Manage Menu</h3></a>
+        <p>Add, edit, and organize your restaurant’s menu effortlessly.</p>
+      </div>
+
+      <div class="feature">
+        <i class="fas fa-receipt"></i>
+        <h3>Track Orders</h3>
+        <p>Keep track of all orders in real-time for faster service.</p>
+      </div>
+
+      <div class="feature">
+        <i class="fas fa-comments"></i>
+        <a href="Feedback.html"><h3>Customer Feedback</h3></a>
+        <p>Analyze customer feedback to improve dining experiences.</p>
+      </div>
+
+      <div class="feature">
+        <i class="fas fa-box"></i>
+        <a href="index_4.html"><h3>Catalog</h3></a>
+        <p>View and manage all items available in the restaurant catalog.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 RestaurantPro. All rights reserved.
+  </footer>
+
+  <!-- JS -->
+  <script>
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute("href"));
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
+    // Back-to-top button
+    const backToTop = document.createElement("button");
+    backToTop.textContent = "↑ Top";
+    backToTop.style.position = "fixed";
+    backToTop.style.bottom = "20px";
+    backToTop.style.right = "20px";
+    backToTop.style.padding = "10px 15px";
+    backToTop.style.backgroundColor = "#ffcc00";
+    backToTop.style.border = "none";
+    backToTop.style.borderRadius = "8px";
+    backToTop.style.cursor = "pointer";
+    backToTop.style.display = "none";
+    backToTop.style.zIndex = "1000";
+    document.body.appendChild(backToTop);
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) backToTop.style.display = "block";
+      else backToTop.style.display = "none";
+    });
+
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Hero "Get Started" button click effect
+    document.querySelector(".btn").addEventListener("click", () => {
+      alert("Redirecting to Menu page...");
+    });
+  </script>
+
+  <!-- FontAwesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

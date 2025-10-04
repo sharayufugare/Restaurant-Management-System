@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RestaurantPro - Catalog</title>
+  <style>
+    /* 🌐 Reset & Font */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url('https://www.choosewestshore.com/wp-content/uploads/2023/05/interior-1024x1024.jpg') 
+        no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Overlay Blur */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px);
+      z-index: -1;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #f1d05b;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      font-size: 2.3rem;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      color: #fff;
+      font-size: 1rem;
+      opacity: 0.85;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    /* 🌟 Transparent Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    table:hover {
+      transform: scale(1.01);
+    }
+
+    table th, table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      text-align: left;
+      color: #fff;
+    }
+
+    table th {
+      background: rgba(255, 215, 0, 0.25);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    table tr:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transition: 0.3s;
+    }
+
+    .actions button {
+      padding: 7px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 6px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .edit { background: #3498db; color: #fff; }
+    .edit:hover { background: #2980b9; }
+    .delete { background: #e74c3c; color: #fff; }
+    .delete:hover { background: #c0392b; }
+    .toggle { background: #27ae60; color: #fff; }
+    .toggle:hover { background: #1e8449; }
+
+    /* ➕ Add Item */
+    .form-section, .category-manager, .bulk-upload {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    .form-section:hover, .category-manager:hover, .bulk-upload:hover {
+      transform: translateY(-3px);
+    }
+
+    .form-section h2, .category-manager h2, .bulk-upload h2 {
+      color: #f1d05b;
+      margin-bottom: 15px;
+    }
+
+    .form-section input, .form-section textarea, .form-section select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .form-section input::placeholder, textarea::placeholder {
+      color: #ddd;
+    }
+
+    .form-section input:focus, .form-section textarea:focus, .form-section select:focus {
+      background: rgba(255,255,255,0.3);
+      outline: none;
+    }
+
+    .form-section button {
+      padding: 12px 20px;
+      background: #27ae60;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .form-section button:hover {
+      background: #1f8a4c;
+      transform: translateY(-2px);
+    }
+
+    /* 📂 Category Manager */
+    .category-item {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .category-item:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .category-manager input {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      width: 60%;
+      margin-right: 10px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+    }
+
+    .category-manager button {
+      background: #e67e22;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .category-manager button:hover {
+      background: #ca6a13;
+    }
+
+    /* 📦 Bulk Upload */
+    .bulk-upload input[type="file"] {
+      margin-top: 10px;
+      background: rgba(255,255,255,0.2);
+      padding: 10px;
+      border-radius: 8px;
+      color: #ddd;
+      border: none;
+    }
+
+    .bulk-upload button {
+      background: #b7a03a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .bulk-upload button:hover {
+      background: #a38c2e;
+    }
+
+    @media (max-width: 768px) {
+      table th, table td { font-size: 0.9rem; }
+      header h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📦 Catalog Management</h1>
+    <p>Admin Dashboard – Manage your restaurant’s menu here</p>
+  </header>
+
+  <div class="container">
+
+    <h2 style="color:#f1d05b;">All Menu Items</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Dish Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Margherita Pizza</td>
+          <td>Classic tomato, mozzarella, basil</td>
+          <td>₹300</td>
+          <td>Pizza</td>
+          <td>Available</td>
+          <td class="actions">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+            <button class="toggle">Toggle Stock</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Chocolate Cake</td>
+          <td>Rich dark chocolate cake</td>
+          <td>₹220</td>
+          <td>Dessert</td>
+          <td>Out of Stock</td>
+          <td class="actions">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+            <button class="toggle">Toggle Stock</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ➕ Add New Item -->
+    <div class="form-section">
+      <h2>Add New Item</h2>
+      <form>
+        <input type="text" placeholder="Dish Name" required>
+        <textarea rows="3" placeholder="Description" required></textarea>
+        <input type="number" placeholder="Price (₹)" required>
+        <select>
+          <option>Starters</option>
+          <option>Main Course</option>
+          <option>Pizza</option>
+          <option>Dessert</option>
+          <option>Beverages</option>
+        </select>
+        <input type="file" accept="image/*">
+        <button type="submit">Add Item</button>
+      </form>
+    </div>
+
+    <!-- 📦 Category Manager -->
+    <div class="category-manager">
+      <h2>Category Manager</h2>
+      <input type="text" placeholder="New Category">
+      <button>Add Category</button>
+      <div class="category-list">
+        <span class="category-item">Starters</span>
+        <span class="category-item">Main Course</span>
+        <span class="category-item">Pizza</span>
+        <span class="category-item">Desserts</span>
+      </div>
+    </div>
+
+    <!-- 📂 Bulk Upload -->
+    <div class="bulk-upload">
+      <h2>Bulk Upload Menu Items</h2>
+      <p>Upload CSV/Excel file to add multiple dishes at once.</p>
+      <input type="file" accept=".csv,.xlsx">
+      <br>
+      <button>Upload</button>
+    </div>
+
+  </div>
+
+  <script>
+    const addItemForm = document.querySelector('.form-section form');
+    const tableBody = document.querySelector('table tbody');
+
+    addItemForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = addItemForm.querySelector('input[type="text"]').value.trim();
+      const desc = addItemForm.querySelector('textarea').value.trim();
+      const price = addItemForm.querySelector('input[type="number"]').value.trim();
+      const category = addItemForm.querySelector('select').value;
+      const status = 'Available';
+
+      if(!name || !desc || !price || !category) {
+        alert('Please fill all fields!');
+        return;
+      }
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${name}</td>
+        <td>${desc}</td>
+        <td>₹${price}</td>
+        <td>${category}</td>
+        <td>${status}</td>
+        <td class="actions">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+          <button class="toggle">Toggle Stock</button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+      addItemForm.reset();
+    });
+
+    tableBody.addEventListener('click', (e) => {
+      const target = e.target;
+      const row = target.closest('tr');
+
+      if(target.classList.contains('delete')) {
+        if(confirm('Are you sure you want to delete this item?')) row.remove();
+      }
+
+      if(target.classList.contains('toggle')) {
+        const statusCell = row.cells[4];
+        statusCell.textContent = statusCell.textContent === 'Available' ? 'Out of Stock' : 'Available';
+      }
+
+      if(target.classList.contains('edit')) {
+        const name = row.cells[0].textContent;
+        const desc = row.cells[1].textContent;
+        const price = row.cells[2].textContent.replace('₹','');
+        const category = row.cells[3].textContent;
+
+        const newName = prompt('Edit Dish Name:', name);
+        const newDesc = prompt('Edit Description:', desc);
+        const newPrice = prompt('Edit Price:', price);
+        const newCategory = prompt('Edit Category:', category);
+
+        if(newName) row.cells[0].textContent = newName;
+        if(newDesc) row.cells[1].textContent = newDesc;
+        if(newPrice) row.cells[2].textContent = `₹${newPrice}`;
+        if(newCategory) row.cells[3].textContent = newCategory;
+      }
+    });
+
+    const categoryInput = document.querySelector('.category-manager input');
+    const addCategoryBtn = document.querySelector('.category-manager button');
+    const categoryList = document.querySelector('.category-list');
+
+    addCategoryBtn.addEventListener('click', () => {
+      const categoryName = categoryInput.value.trim();
+      if(!categoryName) {
+        alert('Enter a category name!');
+        return;
+      }
+
+      const span = document.createElement('span');
+      span.className = 'category-item';
+      span.textContent = categoryName;
+      categoryList.appendChild(span);
+      categoryInput.value = '';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Feedback - RestaurantPro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    /* ---------- Base Styles ---------- */
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80")
+        no-repeat center center fixed;
+      background-size: cover;
+      color: #222;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(6px) brightness(0.8);
+      z-index: -1;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      text-align: center;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* ---------- Dark Mode Button ---------- */
+    .toggle-container {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+    }
+
+    .toggle-container button {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .toggle-container button:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    /* ---------- Card ---------- */
+    .feedback-card {
+      max-width: 600px;
+      margin: 60px auto;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 40px 35px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      color: #fff;
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 3px #000;
+      margin-bottom: 20px;
+    }
+
+    p.text-muted {
+      color: rgba(255, 255, 255, 0.8) !important;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    /* ---------- Form Fields ---------- */
+    .form-label {
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .form-control,
+    .form-select,
+    textarea {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      border-radius: 10px;
+    }
+
+    .form-control::placeholder,
+    textarea::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      outline: none;
+      box-shadow: 0 0 5px #ff8a00;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ---------- Buttons ---------- */
+    .btn-gradient {
+      background: linear-gradient(135deg, #ff8a00, #e52e71);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 12px 20px;
+      width: 100%;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-gradient:hover {
+      transform: scale(1.05);
+    }
+
+    /* ---------- Feedback Result ---------- */
+    #feedbackResult {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    /* ---------- Dark Mode ---------- */
+    body.dark {
+      color: #eee;
+    }
+
+    body.dark header {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f7f7f7;
+    }
+
+    body.dark .feedback-card {
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+    }
+
+    body.dark .form-control,
+    body.dark .form-select {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid #555;
+    }
+
+    body.dark .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+      .feedback-card {
+        margin: 40px 20px;
+        padding: 30px 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toggle-container">
+    <button id="modeToggle">🌙 Dark Mode</button>
+  </div>
+
+  <header>💬 Customer Feedback</header>
+
+  <div class="feedback-card">
+    <p class="text-muted">We value your feedback! Please share your thoughts below.</p>
+    <form id="feedbackForm">
+      <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="name" class="form-control" placeholder="Enter your name" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-control" placeholder="Enter your email" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Rating</label>
+        <select name="rating" class="form-select" required>
+          <option value="">Select rating</option>
+          <option value="1">⭐ 1 - Very Poor</option>
+          <option value="2">⭐⭐ 2 - Poor</option>
+          <option value="3">⭐⭐⭐ 3 - Average</option>
+          <option value="4">⭐⭐⭐⭐ 4 - Good</option>
+          <option value="5">⭐⭐⭐⭐⭐ 5 - Excellent</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Feedback Message</label>
+        <textarea name="message" class="form-control" rows="4" placeholder="Write your feedback here..." required></textarea>
+      </div>
+      <button type="submit" class="btn-gradient">Submit Feedback</button>
+    </form>
+    <div id="feedbackResult"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("feedbackForm");
+    const resultDiv = document.getElementById("feedbackResult");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        rating: form.rating.value,
+        message: form.message.value.trim(),
+      };
+
+      if (!data.name || !data.email || !data.rating || !data.message) {
+        resultDiv.textContent = "⚠️ Please fill all fields!";
+        resultDiv.style.color = "orange";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:3000/submit-feedback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          resultDiv.textContent = "✅ " + result.message;
+          resultDiv.style.color = "#0f0";
+          form.reset();
+        } else {
+          resultDiv.textContent = result.message || "❌ Submission failed!";
+          resultDiv.style.color = "red";
+        }
+      } catch (err) {
+        console.error(err);
+        resultDiv.textContent = "⚠️ Server error. Please try again later.";
+        resultDiv.style.color = "red";
+      }
+    });
+
+    // Dark Mode Toggle
+    const toggleBtn = document.getElementById("modeToggle");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      toggleBtn.textContent = document.body.classList.contains("dark")
+        ? "☀️ Bright Mode"
+        : "🌙 Dark Mode";
+    });
+  </script>
+</body>
+</html>
