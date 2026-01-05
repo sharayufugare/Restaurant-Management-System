@@ -1,52 +1,51 @@
-#Restaurant Management System
 
-Restaurant Management System – Backend (Node.js + MySQL)
+**Restaurant Management System – Backend (Node.js + MySQL)**
 
 This project is a backend REST API for a Restaurant Management System, developed using Node.js, Express, and MySQL.
 It provides APIs to manage menu items, categories, customer contact information, and feedback, making it suitable for integration with any frontend (React, HTML/CSS/JS, etc.).
 
-.
 
-📌 Features
+**📌 Features**
 
-🔹 Menu Management
+**🔹 Menu Management**
 
-Get all menu items
-Add new dishes
-Update existing dishes
-Delete dishes
-Search dishes by name or ingredients
+- Get all menu items
+- Add new dishes
+- Update existing dishes
+- Delete dishes
+- Search dishes by name or ingredients
 
-🔹 Category Management
+**🔹 Category Management**
 
-Fetch all food categories
-Add new categories
+- Fetch all food categories
+- Add new categories
 
-🔹 Contact Management
+**🔹 Contact Management**
 
 Store customer contact queries
 View all customer contact records
 
-🔹 Feedback System
+**🔹 Feedback System**
 
-Submit customer feedback
-View all feedback sorted by latest entries
+- Submit customer feedback
+- View all feedback sorted by latest entries
 
-🛠 Technologies Used
+**🛠 Technologies Used**
 
-Node.js
-Express.js
-MySQL
-REST API architecture
+- Express.js
+- MySQL
+- Express.js
+- REST API architecture
+- Node.js
 
-⚙️ Database Tables Used
+**⚙️ Database Tables Used**
 
-menu
-categories
-contact_info
-feedback
+- menu
+- categories
+- contact_info
+- feedback
 
-🚀 How to Run the Project
+**🚀 How to Run the Project**
 
 1.Clone the repository
 2.Install dependencies:
